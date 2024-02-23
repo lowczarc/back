@@ -1,0 +1,25 @@
+===============================================================================
+BACK - A Forth compiler
+===============================================================================
+
+-------------------------------------------------------------------------------
+I don't know why but I'm writing a Forth compiler now. It's not efficient, the
+created assembly code is very bad and un-optimized, I'm directly returning x86
+assembly instead of LLVM IR (bc I'm too lazy to learn) but I'm having fun ok ?
+Of course, don't use it in production (or anywhere really).
+-------------------------------------------------------------------------------
+
+What is forth ?
+-------------------------------------------------------------------------------
+Forth is a stack-based language from the 1970s where everything is written in
+reverse-polish notation.
+
+For example, if you want to print the sum of 39 and 3 you would write
+
+	39 3 + .
+
+(The dot is the word for printing the top of the stack)
+
+It's a very simple language to parse and compile, you don't need an AST, every
+word can be directly translated to assembly. But it is still very capable of 
+abstracting and is far more readable than assembly.
