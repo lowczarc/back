@@ -12,26 +12,28 @@ struct keyword {
 #define count(ARRAY) (sizeof(ARRAY)/sizeof(*ARRAY))
 
 struct keyword KEYWORDS[] = {
-	{ "+", "\tsub r8, 8\n\tmov bx, [r8]\n\tsub r8, 8\n\tmov ax, [r8]\n\tadd ax, bx\n\tmov [r8], ax\n\tadd r8, 8" },
-	{ "-", "\tsub r8, 8\n\tmov bx, [r8]\n\tsub r8, 8\n\tmov ax, [r8]\n\tsub ax, bx\n\tmov [r8], ax\n\tadd r8, 8" },
-	{ "*", "\tsub r8, 8\n\tmov bx, [r8]\n\tsub r8, 8\n\tmov ax, [r8]\n\tmul ax, bx\n\tmov [r8], ax\n\tadd r8, 8" },
-	{ "/", "\txor rdx, rdx\n\tsub r8, 8\n\tmov bx, [r8]\n\tsub r8, 8\n\tmov ax, [r8]\n\tdiv bx\n\tmov [r8], ax\n\tadd r8, 8" },
-	{ "mod", "\txor rdx, rdx\n\tsub r8, 8\n\tmov bx, [r8]\n\tsub r8, 8\n\tmov ax, [r8]\n\tdiv bx\n\tmov [r8], dx\n\tadd r8, 8" },
-	{ "/mod", "\txor rdx, rdx\n\tsub r8, 8\n\tmov bx, [r8]\n\tsub r8, 8\n\tmov ax, [r8]\n\tdiv bx\n\t\tmov [r8], dx\n\tadd r8, 8\n\tmov [r8], ax\n\tadd r8, 8" },
-	{ "and", "\tsub r8, 8\n\tmov bx, [r8]\n\tsub r8, 8\n\tmov ax, [r8]\n\tand ax, bx\n\tmov [r8], ax\n\tadd r8, 8" },
-	{ "or", "\tsub r8, 8\n\tmov bx, [r8]\n\tsub r8, 8\n\tmov ax, [r8]\n\tor ax, bx\n\tmov [r8], ax\n\tadd r8, 8" },
-	{ "or", "\tsub r8, 8\n\tmov bx, [r8]\n\tsub r8, 8\n\tmov ax, [r8]\n\txor ax, bx\n\tmov [r8], ax\n\tadd r8, 8" },
-	{ "not", "\tsub r8, 8\n\tmov ax, [r8]\n\txor cx, cx\n\txor ax, 0\n\tsetz cl\n\tmov [r8], cx\n\tadd r8, 8" },
-	{ "=", "\tsub r8, 8\n\tmov bx, [r8]\n\tsub r8, 8\n\tmov ax, [r8]\n\txor cx, cx\n\txor ax, bx\n\tsetz cl\n\tmov [r8], cx\n\tadd r8, 8" },
-	{ ".", "\tsub r8, 8\n\txor rsi, rsi\n\tmov sil, [r8]\n\txor rax, rax\n\tlea rdi, [rel dot_str]\n\tpush r10\n\tpush r9\n\tpush r8\n\tcall printf wrt ..plt\n\tpop r8\n\tpop r9\n\tpop r10" },
-	{ "emit", "\tsub r8, 8\n\txor rsi, rsi\n\tmov sil, [r8]\n\txor rax, rax\n\tlea rdi, [rel emit_str]\n\tpush r10\n\tpush r9\n\tpush r8\n\tcall printf wrt ..plt\n\tpop r8\n\tpop r9\n\tpop r10" },
+	{ "+", "\tsub r8, 16\n\tmov bx, [r8]\n\tsub r8, 16\n\tmov ax, [r8]\n\tadd ax, bx\n\tmov [r8], ax\n\tadd r8, 16" },
+	{ "-", "\tsub r8, 16\n\tmov bx, [r8]\n\tsub r8, 16\n\tmov ax, [r8]\n\tsub ax, bx\n\tmov [r8], ax\n\tadd r8, 16" },
+	{ "*", "\tsub r8, 16\n\tmov bx, [r8]\n\tsub r8, 16\n\tmov ax, [r8]\n\tmul ax, bx\n\tmov [r8], ax\n\tadd r8, 16" },
+	{ "/", "\txor rdx, rdx\n\tsub r8, 16\n\tmov bx, [r8]\n\tsub r8, 16\n\tmov ax, [r8]\n\tdiv bx\n\tmov [r8], ax\n\tadd r8, 16" },
+	{ "mod", "\txor rdx, rdx\n\tsub r8, 16\n\tmov bx, [r8]\n\tsub r8, 16\n\tmov ax, [r8]\n\tdiv bx\n\tmov [r8], dx\n\tadd r8, 16" },
+	{ "/mod", "\txor rdx, rdx\n\tsub r8, 16\n\tmov bx, [r8]\n\tsub r8, 16\n\tmov ax, [r8]\n\tdiv bx\n\t\tmov [r8], dx\n\tadd r8, 16\n\tmov [r8], ax\n\tadd r8, 16" },
+	{ "and", "\tsub r8, 16\n\tmov bx, [r8]\n\tsub r8, 16\n\tmov ax, [r8]\n\tand ax, bx\n\tmov [r8], ax\n\tadd r8, 16" },
+	{ "or", "\tsub r8, 16\n\tmov bx, [r8]\n\tsub r8, 16\n\tmov ax, [r8]\n\tor ax, bx\n\tmov [r8], ax\n\tadd r8, 16" },
+	{ "or", "\tsub r8, 16\n\tmov bx, [r8]\n\tsub r8, 16\n\tmov ax, [r8]\n\txor ax, bx\n\tmov [r8], ax\n\tadd r8, 16" },
+	{ "not", "\tsub r8, 16\n\tmov ax, [r8]\n\txor cx, cx\n\txor ax, 0\n\tsetz cl\n\tmov [r8], cx\n\tadd r8, 16" },
+	{ "=", "\tsub r8, 16\n\tmov bx, [r8]\n\tsub r8, 16\n\tmov ax, [r8]\n\txor cx, cx\n\txor ax, bx\n\tsetz cl\n\tmov [r8], cx\n\tadd r8, 16" },
+	{ ">", "\tsub r8, 16\n\tmov bx, [r8]\n\tsub r8, 16\n\tmov ax, [r8]\n\txor cx, cx\n\tcmp ax, bx\n\tsetg cl\n\tmov [r8], cx\n\tadd r8, 16" },
+	{ "<", "\tsub r8, 16\n\tmov bx, [r8]\n\tsub r8, 16\n\tmov ax, [r8]\n\txor cx, cx\n\tcmp bx, ax\n\tsetg cl\n\tmov [r8], cx\n\tadd r8, 16" },
+	{ ".", "\tsub r8, 16\n\txor rsi, rsi\n\tmov si, [r8]\n\txor rax, rax\n\tlea rdi, [rel dot_str]\n\tpush r10\n\tpush r9\n\tpush r8\n\tcall printf wrt ..plt\n\tpop r8\n\tpop r9\n\tpop r10" },
+	{ "emit", "\tsub r8, 16\n\txor rsi, rsi\n\tmov si, [r8]\n\txor rax, rax\n\tlea rdi, [rel emit_str]\n\tpush r10\n\tpush r9\n\tpush r8\n\tcall printf wrt ..plt\n\tpop r8\n\tpop r9\n\tpop r10" },
 	{ "cr", "\txor rax, rax\n\tlea rdi, [rel cr_str]\n\tpush r10\n\tpush r9\n\tpush r8\n\tcall printf wrt ..plt\n\tpop r8\n\tpop r9\n\tpop r10" },
-	{ "swap", "\tsub r8, 8\n\tmov ax, [r8]\n\tsub r8, 8\n\tmov bx, [r8]\n\tmov [r8], ax\n\tadd r8, 8\n\tmov [r8], bx\n\tadd r8, 8" },
-	{ "drop", "\tsub r8, 8\n\tmov ax, [r8]" },
-	{ "dup", "\tsub r8, 8\n\tmov ax, [r8]\n\tmov [r8], ax\n\tadd r8, 8\n\tmov [r8], ax\n\tadd r8, 8" },
-	{ "over", "\tsub r8, 8\n\tmov ax, [r8]\n\tsub r8, 8\n\tmov bx, [r8]\n\tmov [r8], bx\n\tadd r8, 8\n\tmov [r8], ax\n\tadd r8, 8\n\tmov [r8], bx\n\tadd r8, 8" },
-	{ "rot", "\tsub r8, 8\n\tmov ax, [r8]\n\tsub r8, 8\n\tmov bx, [r8]\n\tsub r8, 8\n\tmov cx, [r8]\n\tmov [r8], bx\n\tadd r8, 8\n\tmov [r8], ax\n\tadd r8, 8\n\tmov [r8], cx\n\tadd r8, 8" },
-	{ "i", "\t mov [r8], r9b\n\tadd r8, 8" },
+	{ "swap", "\tsub r8, 16\n\tmov ax, [r8]\n\tsub r8, 16\n\tmov bx, [r8]\n\tmov [r8], ax\n\tadd r8, 16\n\tmov [r8], bx\n\tadd r8, 16" },
+	{ "drop", "\tsub r8, 16\n\tmov ax, [r8]" },
+	{ "dup", "\tsub r8, 16\n\tmov ax, [r8]\n\tmov [r8], ax\n\tadd r8, 16\n\tmov [r8], ax\n\tadd r8, 16" },
+	{ "over", "\tsub r8, 16\n\tmov ax, [r8]\n\tsub r8, 16\n\tmov bx, [r8]\n\tmov [r8], bx\n\tadd r8, 16\n\tmov [r8], ax\n\tadd r8, 16\n\tmov [r8], bx\n\tadd r8, 16" },
+	{ "rot", "\tsub r8, 16\n\tmov ax, [r8]\n\tsub r8, 16\n\tmov bx, [r8]\n\tsub r8, 16\n\tmov cx, [r8]\n\tmov [r8], bx\n\tadd r8, 16\n\tmov [r8], ax\n\tadd r8, 16\n\tmov [r8], cx\n\tadd r8, 16" },
+	{ "i", "\t mov [r8], r9w\n\tadd r8, 16" },
 };
 
 char *get_next_word(FILE *fd) {
@@ -140,7 +142,7 @@ int main(int argc, char **argv) {
 
 
 		if (word[0] >= '0' && word[0] <= '9') {
-			printf("\tmov ax, %s\n\tmov [r8], ax\n\tadd r8, 8\n", word);
+			printf("\tmov ax, %s\n\tmov [r8], ax\n\tadd r8, 16\n", word);
 		} else if (word[0] == ':' && word[1] == 0) {
 			char *label = get_next_word(src_fd);
 
@@ -153,7 +155,7 @@ int main(int argc, char **argv) {
 		} else if (word[0] == ';' && word[1] == 0) {
 			printf("\tret\nskip_%d:\n", skp);
 		} else if (!strncmp(word, "if", 255)) {
-			printf("\tsub r8, 8\n\tmov ax, [r8]\n\tcmp ax, byte 0\n\tje if_%d\n", if_count);
+			printf("\tsub r8, 16\n\tmov ax, [r8]\n\tcmp ax, byte 0\n\tje if_%d\n", if_count);
 			if_stack[++if_index] = if_count++;
 			if (if_index == 255) {
 				fprintf(stderr, "Nested ifs with a depth of more than 255 are forbidden (and very silly).\n");
@@ -162,7 +164,7 @@ int main(int argc, char **argv) {
 		} else if (!strncmp(word, "then", 255)) {
 			printf("if_%d:\n", if_stack[if_index--]);
 		} else if (!strncmp(word, "do", 255)) {
-			printf("\tpush r9\n\tpush r10\n\tsub r8, 8\n\tmov r9b, [r8]\n\tsub r9b, 1\n\tsub r8, 8\n\tmov r10b, [r8]\ndo_%d:\n\tadd r9b, 1\n\tcmp r9b, r10b\n\tje loop_%d\n", if_count, if_count);
+			printf("\tpush r9\n\tpush r10\n\tsub r8, 16\n\tmov r9w, [r8]\n\tsub r9w, 1\n\tsub r8, 16\n\tmov r10w, [r8]\ndo_%d:\n\tadd r9w, 1\n\tcmp r9w, r10w\n\tje loop_%d\n", if_count, if_count);
 			if_stack[++if_index] = if_count++;
 		} else if (!strncmp(word, "loop", 255)) {
 			int loop_index = if_stack[if_index--];
