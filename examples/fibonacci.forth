@@ -8,4 +8,4 @@
 	then
 ;
 
-35 0 do i fibonacci . cr loop
+25 0 do i fibonacci . cr loop
