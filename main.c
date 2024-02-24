@@ -26,6 +26,7 @@ struct keyword KEYWORDS[] = {
 	{ ">", "\tsub r8, 2\n\tmov bx, [r8]\n\tsub r8, 2\n\tmov ax, [r8]\n\txor cx, cx\n\tcmp ax, bx\n\tsetg cl\n\tmov [r8], cx\n\tadd r8, 2" },
 	{ "<", "\tsub r8, 2\n\tmov bx, [r8]\n\tsub r8, 2\n\tmov ax, [r8]\n\txor cx, cx\n\tcmp bx, ax\n\tsetg cl\n\tmov [r8], cx\n\tadd r8, 2" },
 	{ ".", "\tsub r8, 2\n\txor rsi, rsi\n\tmov si, [r8]\n\txor rax, rax\n\tlea rdi, [rel dot_str]\n\tpush r11\n\tpush r10\n\tpush r9\n\tpush r8\n\tcall printf wrt ..plt\n\tpop r8\n\tpop r9\n\tpop r10\n\tpop r11" },
+	{ "key", "\txor rax, rax\n\tpush r11\n\tpush r10\n\tpush r9\n\tpush r8\n\tcall getchar\n\tpop r8\n\tpop r9\n\tpop r10\n\tpop r11\n\tmov [r8], ax\n\tadd r8, 2" },
 	{ "emit", "\tsub r8, 2\n\txor rsi, rsi\n\tmov si, [r8]\n\txor rax, rax\n\tlea rdi, [rel emit_str]\n\tpush r11\n\tpush r10\n\tpush r9\n\tpush r8\n\tcall printf wrt ..plt\n\tpop r8\n\tpop r9\n\tpop r10\n\tpop r11" },
 	{ "cr", "\txor rax, rax\n\tlea rdi, [rel cr_str]\n\tpush r11\n\tpush r10\n\tpush r9\n\tpush r8\n\tcall printf wrt ..plt\n\tpop r8\n\tpop r9\n\tpop r10\n\tpop r11" },
 	{ "swap", "\tsub r8, 2\n\tmov ax, [r8]\n\tsub r8, 2\n\tmov bx, [r8]\n\tmov [r8], ax\n\tadd r8, 2\n\tmov [r8], bx\n\tadd r8, 2" },
@@ -177,11 +178,15 @@ int main(int argc, char **argv) {
 		return -1;
 	}
 	
-	printf("bits 64\nextern printf\nsection .text\nglobal main\nmain:\n\tpush rbp\n\tlea r8, [rel stack]\n\txor r9, r9\n\txor r10, r10\n\txor r11, r11\n");
+	printf("bits 64\nextern printf\nextern getchar\n\nsection .text\nglobal main\nmain:\n\tpush rbp\n\tlea r8, [rel stack]\n\txor r9, r9\n\txor r10, r10\n\txor r11, r11\n");
 	int skp = 0;
 	int if_count = 0;
 	int if_stack[256] = {0};
 	unsigned char if_index = 255;
+
+	int loop_count = 0;
+	int loop_stack[256] = {0};
+	unsigned char loop_index = 255;
 
 	char *word;
 	while (word = get_next_word(src_fd)) {
@@ -213,11 +218,22 @@ int main(int argc, char **argv) {
 		} else if (!strncmp(word, "then", 255)) {
 			printf("if_%d:\n", if_stack[if_index--]);
 		} else if (!strncmp(word, "do", 255)) {
-			printf("\tpush r9\n\tpush r10\n\tsub r8, 2\n\tmov r9w, [r8]\n\tsub r9w, 1\n\tsub r8, 2\n\tmov r10w, [r8]\ndo_%d:\n\tadd r9w, 1\n\tcmp r9w, r10w\n\tje loop_%d\n", if_count, if_count);
-			if_stack[++if_index] = if_count++;
+			printf("\tpush r9\n\tpush r10\n\tsub r8, 2\n\tmov r9w, [r8]\n\tsub r9w, 1\n\tsub r8, 2\n\tmov r10w, [r8]\ndo_%d:\n\tadd r9w, 1\n\tcmp r9w, r10w\n\tje loop_%d\n", loop_count, loop_count);
+			loop_stack[++loop_index] = loop_count++;
 		} else if (!strncmp(word, "loop", 255)) {
-			int loop_index = if_stack[if_index--];
-			printf("\tjmp do_%d\n\tloop_%d:\n\tpop r10\n\tpop r9\n", loop_index, loop_index);
+			int loop = loop_stack[loop_index--];
+			printf("\tjmp do_%d\n\tloop_%d:\n\tpop r10\n\tpop r9\n", loop, loop);
+		} else if (!strncmp(word, "begin", 255)) {
+			printf("begin_%d:\n", loop_count);
+			loop_stack[++loop_index] = loop_count++;
+		} else if (!strncmp(word, "again", 255)) {
+			int loop = loop_stack[loop_index--];
+			printf("\tjmp begin_%d\nloop_%d:\n", loop, loop);
+		} else if (!strncmp(word, "leave", 255)) {
+			printf("\tjmp loop_%d\n", loop_stack[loop_index]);
+		} else if (!strncmp(word, "\"", 255)) {
+			printf("\tmov rax, str_%d - heap\n\tmov [r8], ax\n\tadd r8, 2\n", STRINGS_LEN);
+			get_string(src_fd);
 		} else if (!strncmp(word, ".\"", 255)) {
 			printf("\txor rax, rax\n\tlea rsi, [rel str_%d]\n\tlea rdi, [rel str_str]\n\tpush r11\n\tpush r10\n\tpush r9\n\tpush r8\n\tcall printf wrt ..plt\n\tpop r8\n\tpop r9\n\tpop r10\n\tpop r11\n", STRINGS_LEN);
 			get_string(src_fd);
@@ -249,11 +265,11 @@ int main(int argc, char **argv) {
 word_found:
 		}
 	}
-	printf("\tpop rbp\n\tret\n\nsection .bss\n\tstack resb 65536\n\theap resb 65536\n");
+	printf("\tpop rbp\n\tret\n\nsection .bss\n\tstack resb 65536\n");
 	if (VARIABLES_OFFSET) {
 		printf("\tvars resb %d\n", VARIABLES_OFFSET);
 	}
-	printf("\nsection .data\n\tdot_str db '%%d', 0\n\temit_str db '%%c', 0\n\tcr_str db 10, 0\n\tstr_str db '%%s', 0\n", VARIABLES_OFFSET);
+	printf("\nsection .data\n\theap: times 32768 db 0\n");
 	while (STRINGS) {
 		printf("\tstr_%d: db '%s', 0\n", --STRINGS_LEN, STRINGS->str);
 		free(STRINGS->str);
@@ -261,10 +277,17 @@ word_found:
 		STRINGS = STRINGS->next;
 		free(old_string);
 	}
+	printf("\tdot_str db '%%d', 0\n\temit_str db '%%c', 0\n\tcr_str db 10, 0\n\tstr_str db '%%s', 0\n", VARIABLES_OFFSET);
+
 	free_variables();
 
 	if (if_index != 255) {
-		fprintf(stderr, "Unexpected EOF in %d-level nested if/loops\n", if_index);
+		fprintf(stderr, "Unexpected EOF in %d-level nested if\n", if_index);
+		return -1;
+	}
+
+	if (loop_index != 255) {
+		fprintf(stderr, "Unexpected EOF in %d-level nested loop\n", loop_index);
 		return -1;
 	}
 
