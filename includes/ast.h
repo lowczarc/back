@@ -67,15 +67,23 @@ union AST_Node_Data {
 	struct AST_Node_Loop loop;
 };
 
+union AST_Node_Generation {
+	int str_label;
+	int variable_nb;
+};
+
 typedef struct AST_Node {
 	enum AST_Token token;
 	union AST_Node_Data data;
+
+	union AST_Node_Generation generation;
+
 	struct AST_Node *next;
 } AST_Node;
 
 AST_Node *parse_to_ast(FILE *src_file);
 
-void dbg_ast(AST_Node *ast, int depth);
+void dbg_ast(FILE *output, AST_Node *ast, int depth);
 char *token_str(enum AST_Token token);
 
 void verify_ast(AST_Node *ast, int root);

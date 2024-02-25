@@ -28,7 +28,6 @@
 	rot rot 2 mdrop
 ;
 
-
 " abcdef" " tutu" strcmp . cr
 " tutu" " abcdef" strcmp . cr
 " tatu" " tata" strcmp . cr

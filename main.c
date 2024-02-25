@@ -1,4 +1,4 @@
-#include "ast.h"
+#include "generation.h"
 #include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -17,7 +17,10 @@ int main(int argc, char **argv) {
 	}
 	
 	AST_Node *ast = parse_to_ast(src_fd);
-	dbg_ast(ast, 0);
+
+	dbg_ast(stderr, ast, 0);
+
+	assembly_generation(stdout, ast);
 
 	return 0;
 }

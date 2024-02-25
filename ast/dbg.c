@@ -47,14 +47,14 @@ char *token_str(enum AST_Token token) {
 	return name;
 }
 
-void dbg_ast(AST_Node *ast, int depth) {
+void dbg_ast(FILE *output, AST_Node *ast, int depth) {
 	AST_Node **walker = &ast;
 	while (*walker) {
 		char *name = token_str((*walker)->token);
 		for (int i = 0; i < depth; i++) {
-			printf("\t");
+			fprintf(output, "\t");
 		}
-		printf("[%02d] %s", (*walker)->token, name);
+		fprintf(output, "[%02d] %s", (*walker)->token, name);
 		switch ((*walker)->token) {
 			case STRING:
 			case PRINT_STRING:
@@ -62,37 +62,37 @@ void dbg_ast(AST_Node *ast, int depth) {
 			case COMMENT:
 			case DEFINITION:
 			case VARIABLE:
-				printf(" (%s)", (*walker)->data.str);
+				fprintf(output, " (%s)", (*walker)->data.str);
 				break;
 
 			case NUMBER:
-				printf(" (%d)", (*walker)->data.nb);
+				fprintf(output, " (%d)", (*walker)->data.nb);
 				break;
 
 			default:
 		}
-		printf("\n");
+		fprintf(output, "\n");
 
 		switch ((*walker)->token) {
 			case DEFINITION:
-				dbg_ast((*walker)->data.definition.body, depth + 1);
+				dbg_ast(output, (*walker)->data.definition.body, depth + 1);
 				break;
 
 			case CONDITION:
-				dbg_ast((*walker)->data.condition.when_true, depth + 1);
+				dbg_ast(output, (*walker)->data.condition.when_true, depth + 1);
 				if ((*walker)->data.condition.when_false) {
 					for (int i = 0; i < depth; i++) {
-						printf("\t");
+						fprintf(output, "\t");
 					}
-					printf("ELSE\n");
-					dbg_ast((*walker)->data.condition.when_false, depth + 1);
+					fprintf(output, "ELSE\n");
+					dbg_ast(output, (*walker)->data.condition.when_false, depth + 1);
 				}
 				break;
 
 			case LOOP_DO:
 			case LOOP_UNTIL:
 			case LOOP_AGAIN:
-				dbg_ast((*walker)->data.loop.body, depth + 1);
+				dbg_ast(output, (*walker)->data.loop.body, depth + 1);
 				break;
 
 			default:

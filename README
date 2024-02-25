@@ -24,3 +24,22 @@ It's a very simple language to parse and compile, you don't need an AST for
 trivial and unoptimized implementations as every word can be directly translated
 to assembly. But it is still very capable of abstracting and is far more
 readable than assembly.
+
+ABI Definition
+-------------------------------------------------------------------------------
+| rax | working register  |
+| rbx | working register  |
+| rcx | Unused for now    |
+| rdx | Unused for now    |
+| rsi | Unused for now    |
+| rdi | Unused for now    |
+| rbp | call stack        |
+| rsp | call stack        |
+|  r8 | working stack top |
+|  r9 | loop i            |
+| r10 | loop max          |
+| r11 | Unused for now    |
+| r12 | heap top          |
+| r13 | working register  |
+| r14 | Unused for now    |
+| r15 | Unused for now    |

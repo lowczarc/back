@@ -3,8 +3,9 @@ CC_FLAGS= -Wall -Wextra -Werror -I includes
 
 all: forthc
 
-OBJS=main.o ast/lexer.o ast/dbg.o ast/tree.o ast/ast.o ast/verify.o
-HEADERS=includes/ast.h
+OBJS=main.o ast/lexer.o ast/dbg.o ast/tree.o ast/ast.o ast/verify.o \
+		 generation/extract.o generation/asm.o
+HEADERS=includes/ast.h includes/generation.h
 
 %.o: %.c $(HEADERS)
 	$(CC) -c -o $@ $< $(CC_FLAGS)
@@ -18,7 +19,7 @@ forthc: $(OBJS) $(HEADERS)
 clean:
 	rm -f forthc
 	rm -f *.o
-	rm -f ast/*.o
+	rm -f $(OBJS)
 	rm -f *.s
 
 .PHONY: clean
