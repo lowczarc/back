@@ -5,34 +5,24 @@
 : strcmp
 	begin
 	ddup
-	@ swap @
-	sp8b rot sp8b rot swap
+	@ 255 and swap @ 255 and
 	ddup
-	= not if - rot rot 2 mdrop leave then
-	dup
-	0 = if - rot rot 2 mdrop leave then
-	over
-	0 = if - rot rot 2 mdrop leave then
-	2 mdrop
-	ddup
-	= not if - leave then
-	dup
-	0 = if - leave then
-	over
-	0 = if - leave then
-	2 mdrop
-	1 cells +
+	-
+	dup 0 = not if rot rot drop drop leave then
+	rot 0 = if swap drop leave then
+	swap 0 = if leave then
+	drop
+	1 +
 	swap
-	1 cells +
+	1 +
 	again
-	rot rot 2 mdrop
+	rot rot drop drop
 ;
 
-
-" abcdef" " tutu" strcmp . cr
-" tutu" " abcdef" strcmp . cr
-" tatu" " tata" strcmp . cr
-" tata" " tatu" strcmp . cr
-" tatau" " tata" strcmp . cr
-" tata" " tatau" strcmp . cr
-" tata" " tata" strcmp . cr
+42 " abcdef" " tutu" strcmp . ."  " . cr
+42 " tutu" " abcdef" strcmp . ."  " . cr
+42 " tatu" " tata" strcmp . ."  " . cr
+42 " tata" " tatu" strcmp . ."  " . cr
+42 " tatau" " tata" strcmp . ."  " . cr
+42 " tata" " tatau" strcmp . ."  " . cr
+42 " tata" " tata" strcmp . ."  " . cr
