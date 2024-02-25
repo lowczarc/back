@@ -3,7 +3,7 @@ CC_FLAGS= -Wall -Wextra -Werror -I includes
 
 all: forthc
 
-OBJS=main.o ast/lexer.o ast/dbg.o
+OBJS=main.o ast/lexer.o ast/dbg.o ast/tree.o ast/ast.o
 HEADERS=includes/ast.h
 
 %.o: %.c $(HEADERS)

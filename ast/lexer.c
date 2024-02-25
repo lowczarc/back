@@ -142,6 +142,3 @@ word_found:
 	return head;
 }
 
-AST_Node *parse_to_ast(FILE *src_file) {
-	return lex(src_file);
-}

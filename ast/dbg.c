@@ -15,6 +15,9 @@ struct token TOKEN_STR[] = {
 	{"CONTROL_IF", CONTROL_IF},
 	{"CONTROL_ELSE", CONTROL_ELSE},
 	{"CONTROL_THEN", CONTROL_THEN},
+	{"LOOP_DO", LOOP_DO},
+	{"LOOP_AGAIN", LOOP_AGAIN},
+	{"LOOP_UNTIL", LOOP_UNTIL},
 	{"CONTROL_DO", CONTROL_DO},
 	{"CONTROL_LOOP", CONTROL_LOOP},
 	{"CONTROL_BEGIN", CONTROL_BEGIN},
@@ -47,13 +50,33 @@ void dbg_ast(AST_Node *ast, int depth) {
 		}
 		printf("[%02d] %s", (*walker)->token, name);
 		if ((*walker)->token == STRING || (*walker)->token == PRINT_STRING
- 			|| (*walker)->token == WORD || (*walker)->token == COMMENT) {
+ 			|| (*walker)->token == WORD || (*walker)->token == COMMENT || (*walker)->token == DEFINITION || (*walker)->token == VARIABLE) {
 			printf(" (%s)", (*walker)->data.str);
 		}
 		if ((*walker)->token == NUMBER) {
 			printf(" (%d)", (*walker)->data.nb);
 		}
+
 		printf("\n");
+		if ((*walker)->token == DEFINITION) {
+			dbg_ast((*walker)->data.definition.body, depth + 1);
+		}
+
+		if ((*walker)->token == CONDITION) {
+			dbg_ast((*walker)->data.condition.when_true, depth + 1);
+			if ((*walker)->data.condition.when_false) {
+				for (int i = 0; i < depth; i++) {
+					printf("\t");
+				}
+				printf("ELSE\n");
+				dbg_ast((*walker)->data.condition.when_false, depth + 1);
+			}
+		}
+
+		if ((*walker)->token == LOOP_DO || (*walker)->token == LOOP_UNTIL || (*walker)->token == LOOP_AGAIN) {
+			dbg_ast((*walker)->data.loop.body, depth + 1);
+		}
+
 		walker = &(*walker)->next;
 	}
 }

@@ -1,6 +1,8 @@
 #include <stdio.h>
 
 enum AST_Token {
+	NONE,
+
 	DEFINITION,
 	DEFINITION_START,
 	DEFINITION_END,
@@ -10,9 +12,12 @@ enum AST_Token {
 	CONTROL_ELSE,
 	CONTROL_THEN,
 
+	LOOP_DO,
 	CONTROL_DO,
 	CONTROL_LOOP,
 
+	LOOP_UNTIL,
+	LOOP_AGAIN,
 	CONTROL_BEGIN,
 	CONTROL_UNTIL,
 	CONTROL_AGAIN,
@@ -35,10 +40,27 @@ enum AST_Token {
 	COMMENT,
 };
 
+struct AST_Node_Definition {
+		char *name;
+		struct AST_Node *body;
+};
+
+struct AST_Node_Loop {
+		struct AST_Node *body;
+};
+
+struct AST_Node_Condition{
+		char *name;
+		struct AST_Node *when_true;
+		struct AST_Node *when_false;
+};
+
 union AST_Node_Data {
 	char *str;
 	int nb;
-	struct AST_Node *definition;
+	struct AST_Node_Definition definition;
+	struct AST_Node_Condition condition;
+	struct AST_Node_Loop loop;
 };
 
 typedef struct AST_Node {
@@ -49,3 +71,6 @@ typedef struct AST_Node {
 
 AST_Node *parse_to_ast(FILE *src_file);
 void dbg_ast(AST_Node *ast, int depth);
+
+AST_Node *grow_tree(AST_Node ***walker);
+AST_Node *lex(FILE *src_file);
