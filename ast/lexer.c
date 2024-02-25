@@ -92,6 +92,7 @@ struct token TOKENS[] = {
 	{"dup", STACK_DUP},
 	{"over", STACK_OVER},
 	{"rot", STACK_ROT},
+	{"leave", LEAVE},
 };
 
 AST_Node *lex(FILE *src_file) {

@@ -18,6 +18,7 @@ forthc: $(OBJS) $(HEADERS)
 clean:
 	rm -f forthc
 	rm -f *.o
+	rm -f ast/*.o
 	rm -f *.s
 
 .PHONY: clean
