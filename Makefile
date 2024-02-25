@@ -13,7 +13,7 @@ HEADERS=includes/ast.h includes/generation.h
 forthc: $(OBJS) $(HEADERS)
 	$(CC) $(OBJS) -o $@ $(CC_FLAGS)
 
-%: %.forth
+%: %.forth forthc
 	(./forthc $< > $@.s) && nasm -f elf64 $@.s && gcc $@.o -static -o $@
 
 clean:

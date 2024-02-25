@@ -20,26 +20,28 @@ For example, if you want to print the sum of 39 and 3 you would write
 
 (The dot is the word for printing the top of the stack)
 
-It's a very simple language to parse and compile, you don't need an AST for
-trivial and unoptimized implementations as every word can be directly translated
-to assembly. But it is still very capable of abstracting and is far more
-readable than assembly.
+It's a very simple language to parse and compile. In theory you don't need an
+AST since every word can be directly translated to assembly.
+I want to try making some optimizations so I've made an AST anyway.
+
+But even with its simplicity the language is still very powerful and allows to
+abstract and is way easier to write than assembly.
 
 ABI Definition
 -------------------------------------------------------------------------------
 | rax | working register  |
 | rbx | working register  |
 | rcx | Unused for now    |
-| rdx | Unused for now    |
+| rdx | working register  |
 | rsi | Unused for now    |
 | rdi | Unused for now    |
 | rbp | call stack        |
 | rsp | call stack        |
 |  r8 | working stack top |
-|  r9 | loop i            |
-| r10 | loop max          |
+|  r9 | do loop i         |
+| r10 | do loop max       |
 | r11 | Unused for now    |
 | r12 | heap top          |
-| r13 | working register  |
+| r13 | Unused for now    |
 | r14 | Unused for now    |
 | r15 | Unused for now    |

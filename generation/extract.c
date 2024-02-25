@@ -47,6 +47,7 @@ void _inplace_string_extraction(String_List **dest, AST_Node *ast, int *label) {
 				(*walker)->generation.str_label = (*label)++;
 
 				*dest = new_string;
+				break;
 
 			default:
 		}
@@ -92,6 +93,7 @@ void _inplace_variable_extraction(Variable_List **dest, AST_Node *ast, int *labe
 				(*walker)->generation.variable_nb = (*label)++;
 
 				*dest = new_string;
+				break;
 
 			default:
 		}
