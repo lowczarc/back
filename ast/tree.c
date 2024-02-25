@@ -37,7 +37,7 @@ struct GTT_Result grow_tree_terminator(AST_Node ***walker, enum AST_Token *termi
 				*walker = &(**walker)->next;
 
 				if ((**walker)->token != WORD) {
-					fprintf(stderr, "Unexpected token [%d] after DEFINITION_START\n", (**walker)->token);
+					fprintf(stderr, "Unexpected token [%s] after DEFINITION_START. Expected WORD.\n", token_str((**walker)->token));
 					exit(-1);
 				}
 
@@ -111,7 +111,7 @@ struct GTT_Result grow_tree_terminator(AST_Node ***walker, enum AST_Token *termi
 				AST_Node *next_node = (**walker)->next;
 
 				if (next_node->token != WORD) {
-					fprintf(stderr, "Unexpected token [%d] after DEFINITION_START\n", (**walker)->token);
+					fprintf(stderr, "Unexpected token [%s] after VARIABLE. Expected WORD.\n", token_str((**walker)->token));
 					exit(-1);
 				}
 
@@ -127,6 +127,14 @@ struct GTT_Result grow_tree_terminator(AST_Node ***walker, enum AST_Token *termi
 		}
 	}
 
+	if (terminator_size != 0) {
+		fprintf(stderr, "Unexpected EOF. Expected ");
+		for (size_t i = 0; i < terminator_size; i++) {
+			fprintf(stderr, "%s%s", i == 0 ? "" : i == terminator_size - 1 ? " or " : ", ", token_str(terminator[i]));
+		}
+		fprintf(stderr, ".\n");
+		exit(-1);
+	}
 	struct GTT_Result r = {NONE, result};
 	return r;
 }

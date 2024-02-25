@@ -38,6 +38,8 @@ enum AST_Token {
 	WORD,
 
 	COMMENT,
+
+	_TOKEN_MAX,
 };
 
 struct AST_Node_Definition {
@@ -70,7 +72,11 @@ typedef struct AST_Node {
 } AST_Node;
 
 AST_Node *parse_to_ast(FILE *src_file);
+
 void dbg_ast(AST_Node *ast, int depth);
+char *token_str(enum AST_Token token);
+
+void verify_ast(AST_Node *ast, int root);
 
 AST_Node *grow_tree(AST_Node ***walker);
 AST_Node *lex(FILE *src_file);
